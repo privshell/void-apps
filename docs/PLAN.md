@@ -40,7 +40,7 @@ Status: deferred by the owner.
 
 ## A6 notifications: partly done, one open item
 
-Implemented from `kreza6173-pixel/void-pulse`, per-app only:
+Implemented from `privshell/void-pulse`, per-app only:
 
 - Posting notifications (mute): POST_NOTIFICATIONS through the A4 permission path; phone-tested and working. Allow/Revoke read-back matches Android.
 - Listener section: apps with no listener service correctly show the empty state. Listener allow/revoke remains available for apps that declare one.
@@ -56,17 +56,17 @@ Status: deferred by the owner.
 
 ## A7 network: done
 
-Ported from `kreza6173-pixel/VOID-WALL`, per-app, no root. Block, unblock, background restrict and allow were all APPLIED on the phone, with read-back from `cmd connectivity get-package-networking-enabled` (output format confirmed: the card shows "read from connectivity"). A blocked browser really lost DNS. Shared uids show the warning, protected and system-uid apps show no buttons. Reboot persistence of Chain 3 rules is still worth a look later, but the owner accepted the section.
+Ported from `privshell/VOID-WALL`, per-app, no root. Block, unblock, background restrict and allow were all APPLIED on the phone, with read-back from `cmd connectivity get-package-networking-enabled` (output format confirmed: the card shows "read from connectivity"). A blocked browser really lost DNS. Shared uids show the warning, protected and system-uid apps show no buttons. Reboot persistence of Chain 3 rules is still worth a look later, but the owner accepted the section.
 
 ## A8 installer + cleaner: done
 
 One home screen, **Install & clean**, with three tabs, plus an **Extract APK** card in app details.
 
-- Install (from `kreza6173-pixel/pulse-install`): shell-side folder browser (default `/sdcard/Download`), APK / APKS / XAPK selection, Inspect (package, label, version, SDK, ABIs, launcher, permissions, SHA-256, installed version, downgrade warning) with a native AXML reader, options `-r` / `-g` / delete after install, several loose APKs as one split session, auto-install folder `/sdcard/pulse-install/auto` with move to `installed/`, local history. Streaming install: `pm install-create`, `sz=$(stat -c%s f) && cat f | pm install-write -S "$sz" <id> <split> -`, `pm install-commit`, abandon on write error. XAPK `manifest.json` `split_apks`, `universal.apk` first, OBB copy to `/sdcard/Android/obb/<pkg>/` with size check.
+- Install (from `privshell/pulse-install`): shell-side folder browser (default `/sdcard/Download`), APK / APKS / XAPK selection, Inspect (package, label, version, SDK, ABIs, launcher, permissions, SHA-256, installed version, downgrade warning) with a native AXML reader, options `-r` / `-g` / delete after install, several loose APKs as one split session, auto-install folder `/sdcard/pulse-install/auto` with move to `installed/`, local history. Streaming install: `pm install-create`, `sz=$(stat -c%s f) && cat f | pm install-write -S "$sz" <id> <split> -`, `pm install-commit`, abandon on write error. XAPK `manifest.json` `split_apks`, `universal.apk` first, OBB copy to `/sdcard/Android/obb/<pkg>/` with size check.
 - Install read-back: package read from the APK manifest; `versionCode` / `lastUpdateTime` from `dumpsys package` before and after. APPLIED only when Android said `Success` **and** the installed version or update time changed.
 - Extract: `pm path`, copy to `/sdcard/Download/pulse-extracted/<pkg>_<version>/`, size check per file; optional `.xapk` with generated `manifest.json` when `zip` exists, checked with `unzip -l`.
 - Left out on purpose: APKM, VirusTotal and the AI assistant (both need INTERNET, which this app does not have).
-- Clean (from `kreza6173-pixel/void-purge`): `pm trim-caches 999999999999` with free space on `/data` measured before and after; empty folders via `find <root> -depth -type d -empty`, removed with `rmdir` only and read back with `[ -e ]`; `/sdcard` itself and system roots are refused.
+- Clean (from `privshell/void-purge`): `pm trim-caches 999999999999` with free space on `/data` measured before and after; empty folders via `find <root> -depth -type d -empty`, removed with `rmdir` only and read back with `[ -e ]`; `/sdcard` itself and system roots are refused.
 - Running apps (void-purge, fixed): the original stopped every third-party package in a background subshell with its output discarded, so it listed nothing and hid every failure. Now live processes come from `ps -A -o USER,PID,NAME` (fallback `ps -A`), grouped by package; `am force-stop --user 0 <pkg>` one by one in the foreground; `ps` read again after 1.2 s. Protected apps (this app, Shizuku, launcher, keyboard, dialer, SMS, WebView, static core list) cannot be selected.
 - Left out of void-purge on purpose: orphaned files, log files, duplicate files and every root tool (the useful root ones are in the 2.0 plan).
 

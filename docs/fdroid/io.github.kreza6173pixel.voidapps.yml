@@ -4,15 +4,15 @@
 Categories:
   - System
 License: MIT
-AuthorName: kreza6173-pixel
-SourceCode: https://github.com/kreza6173-pixel/void-apps
-IssueTracker: https://github.com/kreza6173-pixel/void-apps/issues
-Changelog: https://github.com/kreza6173-pixel/void-apps/blob/main/CHANGELOG.md
+AuthorName: privshell
+SourceCode: https://github.com/privshell/void-apps
+IssueTracker: https://github.com/privshell/void-apps/issues
+Changelog: https://github.com/privshell/void-apps/blob/main/CHANGELOG.md
 
 AutoName: VOID // APPS
 
 RepoType: git
-Repo: https://github.com/kreza6173-pixel/void-apps.git
+Repo: https://github.com/privshell/void-apps.git
 
 Builds:
   - versionName: 1.0.0

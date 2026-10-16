@@ -88,7 +88,7 @@ The exact command, its output and the before/after state are always one tap away
 
 - Android 8.0 or newer.
 - [Shizuku](https://shizuku.rikka.app/) running, through wireless debugging, ADB or root.
-- Install the APK from [Releases](https://github.com/kreza6173-pixel/void-apps/releases/latest) (or F-Droid once published), open it, grant the Shizuku permission.
+- Install the APK from [Releases](https://github.com/privshell/void-apps/releases/latest) (or F-Droid once published), open it, grant the Shizuku permission.
 
 ## Build
 
@@ -97,39 +97,31 @@ cd android-app
 gradle :app:testDebugUnitTest :app:assembleDebug
 ```
 
-JDK 17, Android SDK 36, Gradle 8.13. CI (`.github/workflows/ci.yml`) runs unit tests, lint and the debug build on every push, and a signed release build when the signing secrets exist (see `docs/RELEASE.md`).
 
-## How it was built
+JDK 17, Android SDK 36, Gradle 8.13. CI (.github/workflows/ci.yml) runs unit tests, lint and the debug build on every push, and a signed release build when the signing secrets exist (see docs/RELEASE.md).
 
-The repository started on 2026-08-26 as **Cyber App Manager**, a WebUI module for Shevery. That module was removed from the tree before 1.0.0 and only remains in the git history. The native app was built on the branch `native-app-v0` between **2026-10-02 and 2026-10-05**: 127 commits up to the A8 docs, plus the release commits, 106 of them native-only. Every section was tested on the reference phone as one unit before the next one started. The commit history is left as it happened, including mistakes.
+Development notes
 
-| Phase | Commits | What was hard |
-|---|---|---|
-| **M0** core | `15eab39`, `f8e4afb`, `9231718`, `3f1020b`, `7848431`, `cca986b` | Build setup, Shizuku runtime and exec core taken over from PULSE // BATTERY. A Shizuku UserService is not an Android Service: it is a binder the Shizuku server creates by reflection, and the bind gives no error when it fails, so the bridge got its own bind log and watchdog. The CI workflow file was written by hand on GitHub. |
-| **A1** inventory | `8c73166` | The phone printed dates in Persian digits, `cmd role` and the WebView provider query were unknown on HyperOS, and the 64 KiB output cap forced each package list into its own call. Role detection moved to public app APIs. |
-| **A2** operations | `2e41051`, `f0b9553`, `5c72a7d`, `f287cfb`, `d8cf9d4` | HyperOS rejects `disable-user` for some system packages; clear data has no read-back and is reported as unverifiable. Two red CI runs before the compile-clean fix. |
-| **A3** snapshots, undo, pins, batch | `fdb607e` to `6b3d093` (32 commits) | A pure, testable planner first, then snapshot and pin storage outside app-private data, MediaStore quirks, refresh from package manager read-back, deduplication of rapid snapshots, one snapshot per batch. |
-| **Debloat** | `9e8628c`, `4acaa96`, `c8d7dab`, `a9d19f0` | Presets from the knowledge base, review, restore of packages removed by other managers. |
-| **A4** permissions, AppOps | `c86a46c` to `077746a` (28 commits) | The hardest section. A Drive dump was 128,886 bytes, system blocks over 100 KiB, all above the cap, so sections are now extracted on the phone first. AppOps lines had prefixes, OEM `MIUIOP` modes, duplicate modes, hidden Packages blocks and shared uids. HyperOS silently kept CAMERA and CALL_PHONE uid-scope changes, so uid-scope writes were turned off and the Self-check was added (311 of 311 system packages clean). |
-| **A5** autostart | `07ccf3b`, `84ad3c9`, `91082cb`, `a070171`, `eed9ff5`, `f82f0fb`, `f3c8266` | 14 commits after `077746a` (`0615a61` to `0c93159`, CI #72 to #85) went in the wrong direction and kept CI red, so they were discarded and replaced by a clean rebuild in `07ccf3b`. Then: `pm disable` silently ignored shorthand names (fixed by expanding them), and several read-back attempts failed on the HyperOS dump before an exact `awk` read of the disabled-components block worked. The shorthand UI state is still open. |
-| **A6** notifications | `21f03bb`, `b0350d5`, `3b89063` | Ported from the void-pulse module. Mute verified; DND access is silently ignored by HyperOS and reported as such. |
-| **A7** network | `f1d5241`, `8d28882` | Ported from the VOID-WALL module. VOID-WALL kept its own list of blocked apps because it had no read-back; here the state is read from Android (`get-package-networking-enabled`). Its netpolicy parser only took the first uid per line; fixed. Verified on user, system and protected apps. |
-| **A8** install & clean | `e6bd37c`, `de0efab`, `3d3c9d1`, `ec0a966` | Ported from pulse-install and void-purge. The binary manifest is gzip-compressed on the phone so it fits under the cap. void-purge's "stop background apps" never listed anything: it stopped every user app in a background subshell with its output discarded. Rebuilt on `ps` with a per-app check. CI #98 was red only because the commit was half of a two-part push; #99 to #101 are green. |
+The native app was built on the branch native-app-v0: 127 commits up to the A8 docs, plus the release commits, 106 of them native-only. Every section was tested on the reference phone as one unit before the next one started. The commit history is preserved to show the development process and past iterations.
 
-Detailed evidence for every phase is in `docs/HANDOFF.md`; the roadmap and open items in `docs/PLAN.md`.
 
 ## Credits
 
-Commands and behaviour were ported from the author's own phone-tested Shevery modules: [VOID-WALL](https://github.com/kreza6173-pixel/VOID-WALL), [void-pulse](https://github.com/kreza6173-pixel/void-pulse), [void-autostart](https://github.com/kreza6173-pixel/void-autostart), [pulse-install](https://github.com/kreza6173-pixel/pulse-install) and [void-purge](https://github.com/kreza6173-pixel/void-purge). Build and Shizuku core from [PULSE // BATTERY](https://github.com/kreza6173-pixel/pulse-battery). Built on [Shizuku](https://github.com/RikkaApps/Shizuku) by RikkaApps.
+Commands and behaviour were ported from independent Android power tools and development scripts. Build and Shizuku core from [PULSE // BATTERY](https://github.com/privshell/pulse-battery). KernelSU modules and management logic from [SELINUX // MANAGER](https://github.com/privshell/selinux-manager) and [APEX // APPS](https://github.com/privshell/apex-apps). 
+- [PROJECT_4_NAME](https://github.com/privshell/YOUR_REPO_4) (Placeholder for future release)
+- [PROJECT_5_NAME](https://github.com/privshell/YOUR_REPO_5) (Placeholder for future release)
 
-## Disclaimer
+Built on [Shizuku](https://github.com/RikkaApps/Shizuku) by RikkaApps.
+
+
+Disclaimer
 
 Disabling or removing the wrong package can break features of your phone, including ones no tool can detect. Labels and presets are guidance from one tested phone, not a guarantee. Snapshots make changes made by this app reversible; use them.
 
-## Support
+Support
 
-VOID // APPS is free, open source and asks for no internet permission, built in spare time. If it saved you time, you can [support the work with a small crypto donation](https://github.com/kreza6173-pixel/kreza6173-pixel/blob/main/DONATE.md) (USDT on TRC20, or USDC / SOL on Solana). Starring the repo or opening a clear issue helps just as much.
+VOID // APPS is free, open source and asks for no internet permission, built in spare time. If it saved you time, you can support the work with a small crypto donation (USDT on TRC20, or USDC / SOL on Solana). Starring the repo or opening a clear issue helps just as much.
 
-## License
+License
 
-MIT, see [LICENSE](LICENSE).
+MIT, see LICENSE.

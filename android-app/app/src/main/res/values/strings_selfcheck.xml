@@ -14,5 +14,5 @@
     <string name="selfcheck_summary">Checked: %1$d. Permission errors: %2$d (64 KiB cap: %3$d). No permission state: %4$d. AppOps errors: %5$d. AppOps not split: %6$d. Unrecognised AppOps lines: %7$d.</string>
     <string name="selfcheck_no_issues">No problems found in this group.</string>
     <string name="selfcheck_issue_hint">Share this report in a GitHub issue (template: Device / ROM report) so VOID can be adapted to your device and ROM:</string>
-    <string name="selfcheck_issue_url" translatable="false">https://github.com/kreza6173-pixel/void-apps/issues</string>
+    <string name="selfcheck_issue_url" translatable="false">https://github.com/privshell/void-apps/issues</string>
 </resources>

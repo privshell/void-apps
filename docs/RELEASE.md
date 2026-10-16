@@ -74,5 +74,5 @@ Checks already done for F-Droid: no INTERNET permission, no proprietary librarie
 Pull request to `timschneeb/awesome-shizuku` (`README.md`), alphabetical order, format from its `CONTRIBUTING.md`:
 
 ```
-* [VOID // APPS](https://github.com/kreza6173-pixel/void-apps) - App manager: suspend, disable, debloat presets, permissions and AppOps, autostart, per-app network block, APK/XAPK installer and cleaner. Every change is read back from Android. `MIT`
+* [VOID // APPS](https://github.com/privshell/void-apps) - App manager: suspend, disable, debloat presets, permissions and AppOps, autostart, per-app network block, APK/XAPK installer and cleaner. Every change is read back from Android. `MIT`
 ```
