@@ -107,9 +107,8 @@ The native app was built on the branch native-app-v0: 127 commits up to the A8 d
 
 ## Credits
 
-Commands and behaviour were ported from independent Android power tools and development scripts. Build and Shizuku core from [PULSE // BATTERY](https://github.com/privshell/pulse-battery). KernelSU modules and management logic from [SELINUX // MANAGER](https://github.com/privshell/selinux-manager) and [APEX // APPS](https://github.com/privshell/apex-apps). 
-- [aegis-firewall](https://github.com/privshell/aegis-firewall)
-- [orbit-store](https://github.com/privshell/orbit-store) 
+Commands and behaviour were ported from independent Android power tools and development scripts. Build and Shizuku core from [PULSE // BATTERY](https://github.com/privshell/pulse-battery). KernelSU modules and management logic from [SELINUX // MANAGER](https://github.com/privshell/selinux-manager) and [APEX // APPS](https://github.com/privshell/apex-apps).
+[aegis-firewall](https://github.com/privshell/aegis-firewall).  [orbit-store](https://github.com/privshell/orbit-store) 
 
 Built on [Shizuku](https://github.com/RikkaApps/Shizuku) by RikkaApps.
 
